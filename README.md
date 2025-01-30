@@ -1,6 +1,6 @@
 # BRAPIDD_BA
 
-<h2><em>Assessing highly accelerated 3D-T1w Wave-CAIPI MPRAGE images for brain age prediction in dementia<h2><em>
+<h2><em>Assessing highly accelerated 3D-T1w Wave-CAIPI MPRAGE images for brain age prediction in dementia</h2></em>
 
 
 This repository contains the data and scripts required to reproduce the results of the paper titled: Assessing highly accelerated 3D-T1w Wave-CAIPI MPRAGE images for brain age prediction in dementia. IDs are obfuscated for privacy reasons. 
