@@ -6,7 +6,6 @@ import scipy.stats as stats
 datos_BRAP = pd.read_csv('.../data_BRAP')
 
 # datos_BRAP = datos_BRAP.rename(columns={'Sex': 'sexo(M=1;F=0)', 'Age': 'Edad'})
-.
 datos_train = pd.read_csv('.../Datos_train_sample.csv')
 datos_val = pd.read_csv('.../Datos_val_sample.csv')
 datos_test = pd.read_csv('.../Datos_Test_sample.csv')
