@@ -18,7 +18,7 @@ ro.r('library(robustlmm)')
 ro.r('library(emmeans)')
 
 # Read the data
-df = pd.read_csv('/home/rafa/Paper_UCL/predicciones/Predictions_All_newStats.csv', sep='\t')
+df = pd.read_csv('.../Predictions_All_newStats.csv', sep='\t')
 df['SMC_status'] = df['Disease'].apply(lambda x: 'SMC' if x == 'SMC' else 'notSMC')
 df['ICV'] = df['ICV']/1000000 # resize ICV from mm3 to L
 
@@ -78,7 +78,7 @@ for model in brain_age_models:
     fig, ax = plt.subplots()
     qqplot(residuals, line='s', ax=ax)
     plt.title(f'QQ Plot of Residuals for {model}')
-    plt.savefig(f'/home/rafa/PycharmProjects/CheckResultsUCL/Figures/Figures_Diff/{model}_qqplot_residuals.svg')
+    plt.savefig(f'.../{model}_qqplot_residuals.svg')
     plt.close()
 
     # Shapiro-Wilk test on residuals
@@ -90,7 +90,7 @@ for model in brain_age_models:
     plt.figure(figsize=(10, 6))
     sns.pointplot(x='SMC_status', y=gap_column, hue='acq', data=df, dodge=True, markers=['o', 's'], capsize=.1, palette='colorblind')
     plt.title(f'Interaction Plot for {model} Brain Age Gap')
-    plt.savefig(f'/home/rafa/PycharmProjects/CheckResultsUCL/Figures/Figures_Diff/{model}_interaction_plot.svg')
+    plt.savefig(f'.../{model}_interaction_plot.svg')
     plt.close()
 
     # Perform Breusch-Pagan test
