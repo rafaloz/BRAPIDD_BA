@@ -7,7 +7,7 @@ import statsmodels.api as sm
 import pingouin as pg
 
 # Load and process the dataframe
-predsAll = pd.read_csv('...Predictions.csv')
+predsAll = pd.read_csv('/home/rafa/PycharmProjects/BRAPIDD_BA/Data_and_models/predictions.csv')
 
 model = 'PyMent'  # Options: ['BrainAgeR', 'DBN', 'PyBrainAge', 'ENIGMA', 'PyMent', 'MCCQR_MLP']
 
@@ -23,8 +23,9 @@ x_vals = np.linspace(predsAll['Age'].min(), predsAll['Age'].max(), 100)
 
 # Get unique acquisition values
 acq_values = predsAll['acq'].unique()
-colors = plt.cm.get_cmap('Set1', 2)
-acq_color_dict = {acq_value: colors(i % 2) for i, acq_value in enumerate(acq_values)}
+cmap = plt.colormaps.get_cmap('Set1')
+colors = cmap(np.linspace(0, 1, 2))  # Ensures correct discrete sampling
+acq_color_dict = {acq_value: colors[i % 2] for i, acq_value in enumerate(acq_values)}
 
 for i, acq_value in enumerate(acq_values):
     group = predsAll[predsAll['acq'] == acq_value]
@@ -39,7 +40,7 @@ for i, acq_value in enumerate(acq_values):
 
     # Plot regression line
     x_vals = np.linspace(group['Age'].min(), group['Age'].max(), 100)
-    axs[0, 0].plot(x_vals, model_group.params[0] + model_group.params[1] * x_vals, color=color)
+    axs[0, 0].plot(x_vals, model_group.params.iloc[0] + model_group.params.iloc[1] * x_vals, color=color)
 
     # Calculate MAE, r, R² for each group
     mae = mean_absolute_error(group['Age'], group[model])
@@ -75,7 +76,7 @@ axs[0, 1].set_title(model + ' Rapid vs Standard Prediction')
 axs[0, 1].plot(x_vals, x_vals, 'k--')
 
 ICC_preds = predsAll[['ID', 'acq', model]]
-ICC_preds['ID'] = ICC_preds['ID'].str[:10]
+ICC_preds.loc[:, 'ID'] = ICC_preds['ID'].str[:10]
 
 # Calculate ICC and Pearson's r
 icc = pg.intraclass_corr(data=ICC_preds, targets='ID', raters='acq', ratings=model)['ICC'].iloc[1]
@@ -144,7 +145,7 @@ for i, acq_value in enumerate(acq_values):
 
     # Plot regression line
     x_vals_brainpad = np.linspace(group['BrainPAD'].min(), group['BrainPAD'].max(), 100)
-    axs[1, 1].plot(x_vals_brainpad, model_group.params[0] + model_group.params[1] * x_vals_brainpad, color=color)
+    axs[1, 1].plot(x_vals_brainpad, model_group.params.iloc[0] + model_group.params.iloc[1] * x_vals_brainpad, color=color)
 
     # Calculate statistics
     r_value, _ = stats.pearsonr(group['BrainPAD'], group['MMSE'])
@@ -164,15 +165,3 @@ plt.savefig(model+'.svg', format='svg')
 
 plt.show()
 
-# Display top 10 entries with highest absolute BrainPAD
-predAll_cut = predsAll.copy()
-predAll_cut['BrainPAD'] = predAll_cut['BrainPAD'].abs()
-predAll_cut.sort_values(by='BrainPAD', ascending=False, inplace=True)
-predAll_cut = predAll_cut[['ID', 'Age', 'BrainPAD']]
-
-# Set pandas options for display
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', 1000)
-print(predAll_cut.iloc[0:10, :])
-
-print('pause')

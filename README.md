@@ -13,7 +13,7 @@ The models used in the paper can be found at:
 - [ENIGMA](https://photon-ai.com/enigma_brainage)
 - [PyMent](https://github.com/estenhl/pyment-public)
 
-The model weigths and training scripts for MCCQR_MLP are available in this repository. Its development is based on the work: 
+The model weights and training scripts for MCCQR_MLP are available in this repository. It builds upon the work of:
 
 Hahn, Tim, et al. "An uncertainty-aware, shareable, and transparent neural network architecture for brain-age modeling." Science advances 8.1 (2022): eabg9471. DOI: 10.1126/sciadv.abg9471
 

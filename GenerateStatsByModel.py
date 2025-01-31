@@ -18,7 +18,7 @@ ro.r('library(robustlmm)')
 ro.r('library(emmeans)')
 
 # Read the data
-df = pd.read_csv('.../Predictions_All_newStats.csv', sep='\t')
+df = pd.read_csv('/home/rafa/PycharmProjects/BRAPIDD_BA/Data_and_models/predictions.csv')
 df['SMC_status'] = df['Disease'].apply(lambda x: 'SMC' if x == 'SMC' else 'notSMC')
 df['ICV'] = df['ICV']/1000000 # resize ICV from mm3 to L
 
@@ -78,7 +78,7 @@ for model in brain_age_models:
     fig, ax = plt.subplots()
     qqplot(residuals, line='s', ax=ax)
     plt.title(f'QQ Plot of Residuals for {model}')
-    plt.savefig(f'.../{model}_qqplot_residuals.svg')
+    # plt.savefig(f'.../{model}_qqplot_residuals.svg')
     plt.close()
 
     # Shapiro-Wilk test on residuals
@@ -90,7 +90,7 @@ for model in brain_age_models:
     plt.figure(figsize=(10, 6))
     sns.pointplot(x='SMC_status', y=gap_column, hue='acq', data=df, dodge=True, markers=['o', 's'], capsize=.1, palette='colorblind')
     plt.title(f'Interaction Plot for {model} Brain Age Gap')
-    plt.savefig(f'.../{model}_interaction_plot.svg')
+    # plt.savefig(f'.../{model}_interaction_plot.svg')
     plt.close()
 
     # Perform Breusch-Pagan test
@@ -284,7 +284,7 @@ for ax, (model_name, summaryOutput_forPlot) in zip(axes, zip(brain_age_models, s
     plot_data = summaryOutput_forPlot[summaryOutput_forPlot['Parameter'].isin(plot_params)]
 
     # Replace the parameter names using rename_dict
-    plot_data['Parameter'] = plot_data['Parameter'].replace(rename_dict)
+    plot_data.loc[:, 'Parameter'] = plot_data['Parameter'].replace(rename_dict)
 
     param_order = [
         "SMC x Acquisition Interaction",
@@ -296,7 +296,7 @@ for ax, (model_name, summaryOutput_forPlot) in zip(axes, zip(brain_age_models, s
     ]
 
     # Apply the order using pd.Categorical
-    plot_data['Parameter'] = pd.Categorical(
+    plot_data.loc[:, 'Parameter'] = pd.Categorical(
         plot_data['Parameter'],
         categories=param_order,
         ordered=True
@@ -305,11 +305,15 @@ for ax, (model_name, summaryOutput_forPlot) in zip(axes, zip(brain_age_models, s
     # Sort the data based on the new order
     plot_data = plot_data.sort_values("Parameter")
 
+    # Ensure y-axis respects order
+    ax.set_yticks(range(len(param_order)))
+    ax.set_yticklabels(param_order)
 
     # Draw points and error bars
     for i, row in plot_data.iterrows():
-        ax.plot([row["CI_lower"], row["CI_upper"]], [row["Parameter"], row["Parameter"]], color='gray')
-        ax.plot(row["Estimate"], row["Parameter"], 'o', color='black')
+        y_pos = param_order.index(row["Parameter"])  # Ensure correct ordering
+        ax.plot([row["CI_lower"], row["CI_upper"]], [y_pos, y_pos], color='gray')
+        ax.plot(row["Estimate"], y_pos, 'o', color='black')
 
     # Add a vertical line at 0 (no effect)
     ax.axvline(x=0, color='red', linestyle='--')
