@@ -1,16 +1,13 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.api as sm
-from numpy import mean, std
 from statsmodels.graphics.api import qqplot
 from statsmodels.stats.diagnostic import het_breuschpagan
-from sklearn.metrics import roc_auc_score, roc_curve, auc
-from scipy.stats import shapiro, levene, norm, mannwhitneyu
+from scipy.stats import shapiro
 import rpy2.robjects as ro
 from rpy2.robjects import pandas2ri
 import warnings
+
+from utils import *
 
 # Suppress FutureWarnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -19,68 +16,6 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 pandas2ri.activate()
 ro.r('library(robustlmm)')
 ro.r('library(emmeans)')
-
-def fisher_z(d):
-    return 0.5 * np.log((1 + d) / (1 - d))
-
-def standardize_d(d):
-    """
-    Caps Cohen's d values to be within -0.999 and 0.999 to ensure valid Fisher's z-transformation.
-
-    Parameters:
-    - d (float): Cohen's d value.
-
-    Returns:
-    - float: Standardized Cohen's d.
-    """
-    return np.clip(d, -0.999, 0.999)
-
-def compare_cohens_d(d1, n1_1, n1_2, d2, n2_1, n2_2):
-    # Calculate standard errors for both Cohen's d values
-    se1 = np.sqrt((n1_1 + n1_2) / (n1_1 * n1_2) + (d1 ** 2) / (2 * (n1_1 + n1_2)))
-    se2 = np.sqrt((n2_1 + n2_2) / (n2_1 * n2_2) + (d2 ** 2) / (2 * (n2_1 + n2_2)))
-
-    # Calculate the z-statistic
-    z = (d1 - d2) / np.sqrt(se1 ** 2 + se2 ** 2)
-
-    # Calculate the p-value (two-tailed)
-    p_value = 2 * (1 - norm.cdf(abs(z)))
-
-    return z, p_value
-
-def calculate_auc_with_roc(df, gap_column):
-
-    y_true = df['SMC_status'].apply(lambda x: 0 if x == 'SMC' else 1)
-    y_score = df[gap_column]
-
-    # Calculate FPR, TPR, and thresholds
-    fpr, tpr, thresholds = roc_curve(y_true, y_score)
-
-    # Calculate AUC
-    roc_auc = auc(fpr, tpr)
-
-    return fpr, tpr, roc_auc
-
-def calculate_auc(df, gap_column):
-    smc_status_numeric = df['SMC_status'].apply(lambda x: 0 if x == 'SMC' else 1)
-    auc_val = roc_auc_score(smc_status_numeric, df[gap_column])
-    return auc_val
-
-def calculate_effect_size(df, gap_column):
-    smc_gap = df[df['SMC_status'] == 'SMC'][gap_column]
-    not_smc_gap = df[df['SMC_status'] == 'notSMC'][gap_column]
-
-    # Cohen's d (standardized mean difference)
-    mean_diff = abs(mean(smc_gap) - mean(not_smc_gap))
-    pooled_std = std(list(smc_gap) + list(not_smc_gap), ddof=1)
-    cohens_d = mean_diff / pooled_std
-
-    # Cliff's Delta (non-parametric effect size)
-    u_stat, _ = mannwhitneyu(smc_gap, not_smc_gap, alternative='two-sided')
-    n1, n2 = len(smc_gap), len(not_smc_gap)
-    cliff_delta = (2 * u_stat - n1 * n2) / (n1 * n2)
-
-    return cohens_d, cliff_delta
 
 # Read the data
 df = pd.read_csv('/home/rafa/Paper_UCL/predicciones/Predictions_All_newStats.csv', sep='\t')

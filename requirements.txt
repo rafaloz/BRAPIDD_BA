@@ -1,18 +1,31 @@
 Bottleneck @ file:///croot/bottleneck_1731058641041/work
 Brotli @ file:///croot/brotli-split_1736182456865/work
+certifi @ file:///home/conda/feedstock_root/build_artifacts/certifi_1734380492396/work/certifi
 cffi @ file:///croot/cffi_1736182485317/work
+charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
 contourpy @ file:///croot/contourpy_1732540045555/work
 cycler @ file:///tmp/build/80754af9/cycler_1637851556182/work
+Deprecated @ file:///opt/conda/conda-bld/deprecated_1659726428456/work
+feature_engine @ file:///home/conda/feedstock_root/build_artifacts/feature_engine_1737937339722/work
+filelock @ file:///croot/filelock_1700591183607/work
 fonttools @ file:///croot/fonttools_1737039080035/work
+fsspec @ file:///croot/fsspec_1736274672181/work
+gmpy2 @ file:///croot/gmpy2_1738085463648/work
 gp-saml-gui @ https://github.com/dlenski/gp-saml-gui/archive/master.zip#sha256=84eb9f188c4af44c3f4cc046569c05f840c53375caadfafbeb7433f06094b8ac
+idna @ file:///croot/idna_1714398848350/work
+importlib-metadata @ file:///croot/importlib_metadata-suite_1704813515092/work
+infoselect @ file:///home/rafa/Descargas/infoselect-master
 Jinja2 @ file:///croot/jinja2_1737760107953/work
 joblib @ file:///croot/joblib_1718217211762/work
 kiwisolver @ file:///croot/kiwisolver_1737039087198/work
 MarkupSafe @ file:///croot/markupsafe_1736366905094/work
 matplotlib==3.10.0
 mkl-service==2.4.0
+mpmath @ file:///croot/mpmath_1690848262763/work
+networkx @ file:///croot/networkx_1737039604450/work
 numexpr @ file:///croot/numexpr_1730215937391/work
 numpy @ file:///croot/numpy_and_numpy_base_1708638617955/work/dist/numpy-1.26.4-cp310-cp310-linux_x86_64.whl#sha256=ce136f308f566617937abac6c8f280bd61b41c12ab7eb7d8784c5795c5be477b
+opentelemetry-api @ file:///croot/opentelemetry-api_1724767675995/work
 packaging @ file:///croot/packaging_1734472117206/work
 pandas @ file:///croot/pandas_1732735089971/work/dist/pandas-2.2.3-cp310-cp310-linux_x86_64.whl#sha256=3fa290e76efa7b7868273de6ab4ee4a73af177cdd88202834ad0eea6dd898d9e
 pandas-flavor==0.6.0
@@ -24,8 +37,10 @@ pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
 pyparsing @ file:///croot/pyparsing_1731445506121/work
 PyQt5==5.15.10
 PyQt5_sip @ file:///croot/pyqt-split_1736540531116/work/pyqt_sip
+PySocks @ file:///home/builder/ci_310/pysocks_1640793678128/work
 python-dateutil @ file:///croot/python-dateutil_1716495738603/work
 pytz @ file:///croot/pytz_1713974312559/work
+requests @ file:///croot/requests_1730999120400/work
 rpy2==3.5.11
 scikit-learn @ file:///croot/scikit-learn_1737988764076/work
 scipy @ file:///croot/scipy_1737122901252/work/dist/scipy-1.15.1-cp310-cp310-linux_x86_64.whl#sha256=3a9bc1330ec4c8e1a3d5149a796c2a8a571e7b44f1336cfc344c247fed4c0eea
@@ -34,11 +49,19 @@ simplegeneric==0.8.1
 sip @ file:///croot/sip_1736541134699/work
 six @ file:///tmp/build/80754af9/six_1644875935023/work
 statsmodels @ file:///croot/statsmodels_1734018870787/work
+sympy @ file:///croot/sympy_1738108488918/work
 tabulate==0.9.0
 threadpoolctl @ file:///croot/threadpoolctl_1719407800858/work
 tomli @ file:///opt/conda/conda-bld/tomli_1657175507142/work
+torch @ file:///croot/libtorch_1736205314341/work
+torchaudio==2.5.1
+torchvision==0.20.1
 tornado @ file:///croot/tornado_1733960490606/work
+typing_extensions @ file:///croot/typing_extensions_1734714854207/work
 tzdata @ file:///croot/python-tzdata_1690578112552/work
 tzlocal @ file:///croot/tzlocal_1715108795189/work
 unicodedata2 @ file:///croot/unicodedata2_1736541023050/work
+urllib3 @ file:///croot/urllib3_1737133630106/work
+wrapt @ file:///croot/wrapt_1736540904746/work
 xarray==2025.1.1
+zipp @ file:///croot/zipp_1732630741423/work

@@ -2,7 +2,6 @@ import torch
 print("Current default dtype:", torch.get_default_dtype())
 torch.set_default_dtype(torch.float32)  # Set default dtype to float32
 import torch.nn as nn
-import torch.optim as optim
 import torch.nn.functional as F
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
@@ -11,11 +10,8 @@ import random
 import copy
 
 from scipy import interpolate
-from scipy.stats import uniform
-from torch.distributions.uniform import Uniform
 
 from sklearn.metrics import mean_absolute_error
-from sklearn.model_selection import train_test_split
 
 import matplotlib.pyplot as plt
 
@@ -66,9 +62,9 @@ class Dataset():
         return count
 
 
-class MCQRMLP_Regressor(nn.Module):
+class MCCQR_MLP_Regressor(nn.Module):
     def __init__(self, input_dim, hidden_dim1, quantile_fits=None, dropout_rate=0.2, device='cpu'):
-        super(MCQRMLP_Regressor, self).__init__()
+        super(MCCQR_MLP_Regressor, self).__init__()
         self.device = torch.device(device)
         self.input_dim = input_dim
         self.hidden_dim1 = hidden_dim1

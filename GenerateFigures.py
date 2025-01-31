@@ -7,7 +7,7 @@ import statsmodels.api as sm
 import pingouin as pg
 
 # Load and process the dataframe
-predsAll = pd.read_csv('/home/rafa/Paper_UCL/predicciones/Predictions_All.csv', sep='\t')
+predsAll = pd.read_csv('...Predictions.csv')
 
 model = 'PyMent'  # Options: ['BrainAgeR', 'DBN', 'PyBrainAge', 'ENIGMA', 'PyMent', 'MCCQR_MLP']
 

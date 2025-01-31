@@ -1,62 +1,31 @@
-import os
-
-# Set environment variables
-os.environ['QT_QPA_PLATFORM'] = 'vnc'
-os.environ['QT_XCB_NATIVE_PAINTING'] = '1'
-
-from utils_Train import *
+from utils import *
 import pickle
-
-import ast
-
 import pandas as pd
-
 from scipy.stats import ks_2samp
-from MultilayerPerceptron.MLP_1_layer import *
-from MultilayerPerceptron.MCQR_MLP import *
-# from MultilayerPerceptron.MLP_1_layer_CE_ORDER import *
-
+from MCQR_MLP import *
 from sklearn.model_selection import train_test_split
-
 from datetime import datetime
 
 # Cargo los datos
-datos_all = pd.read_csv('/home/rafa/PycharmProjects/JoinData_FastSurfer_V2/datos/datos_completos_29_10_2024/FastSurfer_data_V2_morfo_sin_armonizar_29_10_2024.csv')
-datos_balanced = pd.read_csv('/home/rafa/PycharmProjects/JoinData_FastSurfer_V2/datos/datos_completos_23_5_2024/FastSurfer_data_V2_morfo_con_WAND_balanced.csv')
+data = pd.read_csv('..../Training_Data.csv')
 
-# save dir
-save_dir = '/home/rafa/PycharmProjects/JoinData_FastSurfer_V2/modelos/modelos_con_todo/modelo_morfo_100_MCCQR_MLP/'
-
-datos_test_2 = datos_all[datos_all['DataBase'] == 'AgeRisk']
-datos_test_2.to_csv(os.path.join(save_dir, 'Datos_AgeRisk_To_Test.csv'), index=False)
-
-datos_test_3 = datos_all[datos_all['DataBase'] == 'ADNI3']
-datos_test_3.to_csv(os.path.join(save_dir, 'Datos_ADNI3_To_Test.csv'), index=False)
-
-datos_todos = pd.merge(datos_all, datos_balanced[['ID', 'DataBase']], on=['ID', 'DataBase'], how='inner')
-
-# randomizo el orden de las filas y reseteo índices
-datos_todos = datos_todos.sample(frac=1, random_state=42).reset_index(drop=True)
+# randomize
+datos_todos = data.sample(frac=1, random_state=42).reset_index(drop=True)
 datos_train_all, datos_test_all = train_test_split(datos_todos, test_size=0.1, random_state=42)
 
 # resultado deltest KS p valor
 ks_result, features, features_tag = [], [], []
-Results_dataframe_SVR_test = pd.DataFrame()
 Results_dataframe_perceptron_test = pd.DataFrame()
-Results_dataframe_RF_test = pd.DataFrame()
-Results_dataframe_SVR_val = pd.DataFrame()
 Results_dataframe_perceptron_val = pd.DataFrame()
-Results_dataframe_RF_val = pd.DataFrame()
 
 MAE_val, MAE_test, r_test = [], [], []
 
-prediction_SVR_saved_test, prediction_perceptron_saved_test, prediction_RandomForest_saved_test = [], [], []
-prediction_SVR_saved_val, prediction_perceptron_saved_val, prediction_RandomForest_saved_val = [], [], []
+prediction_perceptron_saved_test, prediction_perceptron_saved_val = [], []
 edades_val, edades_test = [], []
 
 for j in [100]:
 
-    save_dir = '/home/rafa/PycharmProjects/JoinData_FastSurfer_V2/modelos/modelos_con_todo/modelo_morfo_100_MCCQR_MLP/'
+    save_dir = '.../savedir/'
     datos_train = datos_train_all
     datos_test = datos_test_all
 
@@ -102,7 +71,6 @@ for j in [100]:
     ks_result.append(ks_test[1])
 
     # guardo los datos de entreno para usarlos luego en el 2º test, validación y test
-
     features_morphological = datos_train.columns.tolist()
 
     print('[INFO] ##### Outliers #####')
@@ -131,7 +99,7 @@ for j in [100]:
     X_val = pd.DataFrame(X_val, columns=features_morphological)
     X_test = pd.DataFrame(X_test, columns=features_morphological)
     start_time = datetime.now()
-    X_train, X_val, X_test, features_names_SFS = feature_selection(X_train, X_val, X_test, edades_todos_train, j, 30)
+    X_train, X_val, X_test, features_names_SFS = feature_selection(X_train, X_val, X_test, edades_todos_train, j, 20)
 
     end_time = datetime.now()
     print(f"Function execution time: {(end_time - start_time).total_seconds()} seconds")
@@ -149,7 +117,7 @@ for j in [100]:
     print('[INFO] ##### Training #####')
 
     # Tab CNN
-    model = MCQRMLP_Regressor(j, 16, quantile_fits=np.arange(0.01, 1.01, 0.01), dropout_rate=0.0, device='cpu')
+    model = MCCQR_MLP_Regressor(j, 16, quantile_fits=np.arange(0.01, 1.01, 0.01), dropout_rate=0.0, device='cpu')
     MAEs_and_rs_perceptron_test = execute_in_val_and_test_MCCQR_MLP(X_train, edades_todos_train, X_val, edades_todos_val, X_test, edades_todos_test, listas_perceptron, model, j, save_dir, 0)
     Results_dataframe_perceptron_test = pd.concat([MAEs_and_rs_perceptron_test, Results_dataframe_perceptron_test], axis=0)
 
