@@ -4,41 +4,17 @@ import os
 import configparser
 import ast
 
-from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_absolute_error, r2_score
 import scipy.stats as stats
 
-def outliers_y_normalizacion(datos_train, datos_val, datos_test, datos_otros):
-
-    features = datos_train.columns.tolist()
-    datos_val = datos_val[features]
-    datos_test = datos_test[features]
-    datos_otros = datos_otros[features]
-
-    datos_train_flat, datos_val_flat, datos_test_flat, datos_otros_flat = outlier_flattening_4_entries(datos_train, datos_val, datos_test, datos_otros)
-    datos_train_norm, datos_val_norm, datos_test_norm, datos_otros_norm = normalize_data_min_max_4_entries(datos_train_flat, datos_val_flat, datos_test_flat, datos_otros_flat, (-1, 1))
-
-    datos_train_norm = pd.DataFrame(datos_train_norm, columns=features)
-    datos_val_norm = pd.DataFrame(datos_val_norm, columns=features)
-    datos_test_norm = pd.DataFrame(datos_test_norm, columns=features)
-    datos_otros_norm = pd.DataFrame(datos_otros_norm, columns=features)
-
-    return datos_train_norm, datos_val_norm, datos_test_norm, datos_otros_norm
-
-# config parser llamo al archivo de configuración
-config_parser = configparser.ConfigParser(allow_no_value=True)
-bindir = os.path.abspath(os.path.dirname(__file__))
-config_parser.read(bindir + "/cfg.cnf")
-
-datos_BRAP = config_parser.get("DATOS", "datos_BRAP_harmo")
-datos_BRAP = pd.read_csv(datos_BRAP)
+datos_BRAP = pd.read_csv('.../data_BRAP')
 
 # datos_BRAP = datos_BRAP.rename(columns={'Sex': 'sexo(M=1;F=0)', 'Age': 'Edad'})
-
-datos_train = pd.read_csv('/home/rafa/PycharmProjects/BA_Model/modelos/modelo_all_armo_100_MCCQR_MLP/Datos_train_sample.csv')
-datos_val = pd.read_csv('/home/rafa/PycharmProjects/BA_Model/modelos/modelo_all_armo_100_MCCQR_MLP/Datos_val_sample.csv')
-datos_test = pd.read_csv('/home/rafa/PycharmProjects/BA_Model/modelos/modelo_all_armo_100_MCCQR_MLP/Datos_Test_sample.csv')
-datos_AgeRisk = pd.read_csv('/home/rafa/PycharmProjects/BA_Model/modelos/modelo_all_armo_100_MCCQR_MLP/Datos_AgeRisk_To_Test.csv')
+.
+datos_train = pd.read_csv('.../Datos_train_sample.csv')
+datos_val = pd.read_csv('.../Datos_val_sample.csv')
+datos_test = pd.read_csv('.../Datos_Test_sample.csv')
+datos_AgeRisk = pd.read_csv('.../Datos_AgeRisk_To_Test.csv')
 
 # Create the new 'participant_id' column with the same values as 'ID'
 datos_BRAP['participant_id'] = datos_BRAP['ID'].astype(str)
@@ -99,7 +75,6 @@ mae = mean_absolute_error(df['Age'], df['prediction'])
 r, _ = stats.pearsonr(df['Age'], df['prediction'])
 r2 = r2_score(df['Age'], df['prediction'])
 
-
 # Scatter plot of real age vs predicted age
 plt.figure(figsize=(8, 6))
 plt.scatter(df['Age'], df['prediction'], alpha=0.9)
@@ -111,7 +86,3 @@ metrics_legend = f"MAE: {mae:.2f}\nr: {r:.2f}\nR²: {r2:.2f}"
 plt.legend([metrics_legend], loc='upper left')
 plt.legend()
 plt.show()
-
-df.to_csv('predictions_MCCQR_MLP_harmo_AgeRisk.csv', index=False)
-
-print('pausa')

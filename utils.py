@@ -354,6 +354,51 @@ def calculate_effect_size(df, gap_column):
 
     return cohens_d, cliff_delta
 
+def outlier_flattening_4_entries(datos_train, datos_val, datos_test, otros_datos):
+    datos_train_flat = datos_train.copy()
+    datos_val_flat = datos_val.copy()
+    datos_test_flat = datos_test.copy()
+    otros_datos_flat = otros_datos.copy()
+
+    for col in datos_train.columns:
+        if col == 'sexo' or col == 'ID' or col == 'Bo' or col == 'sexo(M=1;F=0)' or col == 'Escaner' or col == 'Patologia' or col == 'DataBase' or col == 'Edad':
+            continue
+        else:
+            percentiles = datos_train[col].quantile([0.025, 0.975]).values
+            datos_train_flat[col] = np.clip(datos_train[col], percentiles[0], percentiles[1])
+            datos_val_flat[col] = np.clip(datos_val[col], percentiles[0], percentiles[1])
+            datos_test_flat[col] = np.clip(datos_test[col], percentiles[0], percentiles[1])
+            otros_datos_flat[col] = np.clip(otros_datos[col], percentiles[0], percentiles[1])
+
+    return datos_train_flat, datos_val_flat, datos_test_flat, otros_datos_flat
+
+def normalize_data_min_max_4_entries(datos_train, datos_val, datos_test, otros_datos, range):
+
+    scaler = MinMaxScaler(feature_range=range)
+    datos_train = scaler.fit_transform(datos_train)
+    datos_val = scaler.transform(datos_val)
+    datos_test = scaler.transform(datos_test)
+    otros_datos = scaler.transform(otros_datos)
+
+    return datos_train, datos_val, datos_test, otros_datos
+
+def outliers_y_normalizacion(datos_train, datos_val, datos_test, datos_otros):
+
+    features = datos_train.columns.tolist()
+    datos_val = datos_val[features]
+    datos_test = datos_test[features]
+    datos_otros = datos_otros[features]
+
+    datos_train_flat, datos_val_flat, datos_test_flat, datos_otros_flat = outlier_flattening_4_entries(datos_train, datos_val, datos_test, datos_otros)
+    datos_train_norm, datos_val_norm, datos_test_norm, datos_otros_norm = normalize_data_min_max_4_entries(datos_train_flat, datos_val_flat, datos_test_flat, datos_otros_flat, (-1, 1))
+
+    datos_train_norm = pd.DataFrame(datos_train_norm, columns=features)
+    datos_val_norm = pd.DataFrame(datos_val_norm, columns=features)
+    datos_test_norm = pd.DataFrame(datos_test_norm, columns=features)
+    datos_otros_norm = pd.DataFrame(datos_otros_norm, columns=features)
+
+    return datos_train_norm, datos_val_norm, datos_test_norm, datos_otros_norm
+
 
 
 
