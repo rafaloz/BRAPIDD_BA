@@ -49,10 +49,10 @@ datos_AgeRisk = datos_AgeRisk.drop(['ID', 'Bo', 'sexo(M=1;F=0)', 'Escaner', 'Dat
 
 datos_train_norm, datos_val_norm, datos_test_norm, datos_AgeRisk = outliers_y_normalizacion(datos_train, datos_val, datos_test, datos_AgeRisk)
 
-with open('/home/rafa/PycharmProjects/BA_Model/modelos/modelo_all_armo_100_MCCQR_MLP/MCQR_MLP_nfeats_100_fold_0.pkl', 'rb') as f:
+with open('.../MCQR_MLP_nfeats_100_fold_0.pkl', 'rb') as f:
     loaded_model = pickle.load(f)
 
-features = pd.read_csv('/home/rafa/PycharmProjects/BA_Model/modelos/modelo_all_armo_100_MCCQR_MLP/df_features_con_CoRR.csv')
+features = pd.read_csv('.../df_features_con_CoRR.csv')
 features = ast.literal_eval(features['features'][0])
 
 predictions = loaded_model.predict(datos_AgeRisk[features].values, apply_calibration=True)

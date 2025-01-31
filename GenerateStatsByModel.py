@@ -18,7 +18,7 @@ ro.r('library(robustlmm)')
 ro.r('library(emmeans)')
 
 # Read the data
-df = pd.read_csv('/home/rafa/PycharmProjects/BRAPIDD_BA/Data_and_models/predictions.csv')
+df = pd.read_csv('.../predictions.csv')
 df['SMC_status'] = df['Disease'].apply(lambda x: 'SMC' if x == 'SMC' else 'notSMC')
 df['ICV'] = df['ICV']/1000000 # resize ICV from mm3 to L
 
