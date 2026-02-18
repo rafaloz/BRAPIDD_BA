@@ -3,7 +3,7 @@
 <h2><em>Ultra-fast MRI for brain-age prediction in a real-world cognitive disorders clinic</h2></em>
 
 
-This repository contains the data and scripts required to reproduce the results of the paper titled: Assessing highly accelerated 3D-T1w Wave-CAIPI MPRAGE images for brain age prediction in dementia. IDs are obfuscated for privacy reasons. 
+This repository contains the data and scripts required to reproduce the results of the paper titled: Ultra-fast MRI for brain-age prediction in a real-world cognitive disorders clinic. IDs are obfuscated for privacy reasons. 
 
 The models used in the paper can be found at:
 
